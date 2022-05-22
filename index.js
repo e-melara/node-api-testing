@@ -1,11 +1,10 @@
-import { config } from "dotenv";
+require("dotenv").config();
 
-import cors from "cors";
-import express from "express";
+const fs = require("fs");
+const cors = require("cors");
+const express = require("express");
 
-import main from "./mongo.js";
-
-config();
+const main = require("./mongo");
 
 const app = express();
 
@@ -14,6 +13,12 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Hola Mundo !!");
+});
+
+const dirRoutes = `${__dirname}/src/routes`;
+fs.readdirSync(dirRoutes).forEach((file) => {
+  const nameFile = file.split(".")[0];
+  app.use(require(`${dirRoutes}/${nameFile}`));
 });
 
 main()
@@ -26,4 +31,4 @@ main()
     console.log(err);
   });
 
-export default app;
+module.exports = app;
