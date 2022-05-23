@@ -1,3 +1,7 @@
+const Note = require("../models/Note");
+
 exports.home = function (req, res) {
-  res.send("Hola Mundo !!");
+  Note.find({}, function (err, notes) {
+    res.json(notes);
+  })
 };
